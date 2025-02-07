@@ -11,7 +11,7 @@ Showcased the following:
 5. Instrumented tests for Room database and Retrofit service (endpoint invoke) 
 6. Dependency Injection using Dagger Hilt
 7. Retrofit2 with Moshi for network calls
-8. Project uses latest stable Kotlin version along with KSP instead of Kapt
+8. Project uses latest stable KSP with Kotlin instead of Kapt
 
 *Did not use Jetpack Compose because for the past year I have been working on View only projects.
 
@@ -25,6 +25,7 @@ Triggering endpoint and save result to database, allows to open previous search 
 - about 2h - ui implementation
 - about 2h - testing and bug-fixing
 - about 1h - admin stuff (readme, repo creating because not able to send zip)
+- about 1h - final touch (fix of accidentally broken instrumented tests, Room Flow (issue with DI) as well as minor refactor with code simplification)
 
 ## Dev tools & test device
 
