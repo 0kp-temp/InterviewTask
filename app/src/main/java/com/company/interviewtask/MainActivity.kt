@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshData() {
         val currentSearchQuery = binding.edittextMainactivitySearchquery.text.toString()
+        binding.imagebuttonMainactivitySearch.isEnabled = true
         lifecycleScope.launch {
             dao.getAllSearches().take(COLLECTOR_COUNT).collect { searches ->
                 searches.map { it.searchQuery }.let { searchHistory ->
@@ -119,7 +120,6 @@ class MainActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
-                    binding.imagebuttonMainactivitySearch.isEnabled = true
                 }
                 refreshData()
             }
