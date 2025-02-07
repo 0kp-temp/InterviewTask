@@ -21,7 +21,7 @@ Triggering endpoint and save result to database, allows to open previous search 
 
 ## Timelog
 
-about 2h - project setup and business logic
-about 2h - ui implemenation
-about 2h - testing and bugfixing
-about 1h - admin stuff (readme, repo creating because not able to send zip)
+- about 2h - project setup and business logic
+- about 2h - ui implemenation
+- about 2h - testing and bugfixing
+- about 1h - admin stuff (readme, repo creating because not able to send zip)
