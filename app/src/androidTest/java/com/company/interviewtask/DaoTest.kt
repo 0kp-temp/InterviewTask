@@ -9,6 +9,8 @@ import com.company.interviewtask.database.DAO
 import com.company.interviewtask.database.SearchQuery
 import com.company.interviewtask.database.SearchResult
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
 import org.junit.After
 import org.junit.Before
@@ -36,6 +38,13 @@ class DaoTest {
     @Throws(IOException::class)
     fun tearDown() {
         appDatabase.close()
+    }
+
+    @Test
+    fun testIsSearchPresent() = runTest {
+        assertFalse(dao.isSearchPresent("query"))
+        dao.insert(SearchQuery(1, "query"))
+        assertTrue(dao.isSearchPresent("query"))
     }
 
     @Test

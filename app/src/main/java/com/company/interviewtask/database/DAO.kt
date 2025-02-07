@@ -12,6 +12,9 @@ interface DAO {
     @Query("SELECT * FROM SearchQuery")
     fun getAllSearches(): Flow<List<SearchQueryResults>>
 
+    @Query("SELECT EXISTS (SELECT * FROM SearchQuery WHERE searchQuery = :query)")
+    suspend fun isSearchPresent(query: String): Boolean
+
     @Insert
     suspend fun insert(query: SearchQuery): Long
 

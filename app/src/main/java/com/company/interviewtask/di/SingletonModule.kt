@@ -3,6 +3,7 @@ package com.company.interviewtask.di
 import android.content.Context
 import androidx.room.Room
 import com.company.interviewtask.database.AppDatabase
+import com.company.interviewtask.database.DAO
 import com.company.interviewtask.network.EmployersService
 import com.company.interviewtask.network.EndpointServiceCreator
 import dagger.Module
@@ -23,6 +24,10 @@ object SingletonModule {
             .fallbackToDestructiveMigration().build()
 
     @Provides
-    fun provideEmployersService(): EmployersService = EndpointServiceCreator.createEmployersService()
+    fun provideEmployersService(): EmployersService =
+        EndpointServiceCreator.createEmployersService()
+
+    @Provides
+    fun provideDAO(applicationDatabase: AppDatabase): DAO = applicationDatabase.DAO()
 
 }
