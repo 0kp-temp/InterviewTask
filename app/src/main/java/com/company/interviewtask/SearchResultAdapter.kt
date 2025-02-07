@@ -6,19 +6,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.company.interviewtask.databinding.ItemSearchResultBinding
 
-class SearchResultAdapter(private val onClick: (SearchQueryViewHolder.SearchResultUiData) -> Unit) :
-    ListAdapter<SearchQueryViewHolder.SearchResultUiData, SearchResultViewHolder>(
-        object : DiffUtil.ItemCallback<SearchQueryViewHolder.SearchResultUiData>() {
+class SearchResultAdapter(private val onClick: (SearchResultViewHolder.SearchResultUiData) -> Unit) :
+    ListAdapter<SearchResultViewHolder.SearchResultUiData, SearchResultViewHolder>(
+        object : DiffUtil.ItemCallback<SearchResultViewHolder.SearchResultUiData>() {
             override fun areItemsTheSame(
-                old: SearchQueryViewHolder.SearchResultUiData,
-                new: SearchQueryViewHolder.SearchResultUiData
+                old: SearchResultViewHolder.SearchResultUiData,
+                new: SearchResultViewHolder.SearchResultUiData
             ): Boolean {
                 return old.id == new.id
             }
 
             override fun areContentsTheSame(
-                old: SearchQueryViewHolder.SearchResultUiData,
-                new: SearchQueryViewHolder.SearchResultUiData
+                old: SearchResultViewHolder.SearchResultUiData,
+                new: SearchResultViewHolder.SearchResultUiData
             ): Boolean {
                 return old == new
             }

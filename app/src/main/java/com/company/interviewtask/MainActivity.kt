@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 searches.firstOrNull { it.searchQuery.searchQuery == currentSearchQuery }
                     ?.let { searchQueryResults ->
                         searchResultAdapter.submitList(searchQueryResults.results.map {
-                            SearchQueryViewHolder.SearchResultUiData(
+                            SearchResultViewHolder.SearchResultUiData(
                                 it.id,
                                 it.name
                             )
