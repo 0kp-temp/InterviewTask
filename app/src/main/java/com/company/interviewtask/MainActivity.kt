@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                                 it.name
                             )
                         })
-                    }
+                    } ?: run { searchResultAdapter.submitList(emptyList()) }
             }
         }
     }
