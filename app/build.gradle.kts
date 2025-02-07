@@ -53,6 +53,10 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.coroutines.android)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.adapters)
 
     testImplementation(libs.junit)
     testImplementation(libs.room.testing)
