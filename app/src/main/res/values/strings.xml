@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">InterviewTask</string>
+    <string name="mainactivity_searchbutton_contentdescription">Search</string>
+    <string name="mainactivity_search_history_label">Search history:</string>
+    <string name="mainactivity_searchresultslabel">Search results:</string>
+    <string name="mainactivity_searchquery_contentdescription">Enter employer to search</string>
+    <string name="mainactivity_toast_search_already_done">Search already done!</string>
+    <string name="mainactivity_toast_network_error">Network error!</string>
 </resources>
