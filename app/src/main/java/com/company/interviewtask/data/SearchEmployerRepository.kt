@@ -18,8 +18,13 @@ class SearchEmployerRepository @Inject constructor(
         if (dao.isSearchPresent(query)) {
             throw SearchAlreadyDoneException()
         }
-        val result = employersService.searchEmployers(query)
-        if (result.isSuccessful.not()) {
+        val result = try {
+            val result = employersService.searchEmployers(query)
+            if (result.isSuccessful.not()) {
+                throw SearchNetworkException()
+            }
+            result
+        } catch (e: Exception) {
             throw SearchNetworkException()
         }
         val searchId = dao.insert(SearchQuery(0, query))
