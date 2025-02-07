@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun performSearch() {
+    private fun onSearchPressed() {
         binding.imagebuttonMainactivitySearch.isEnabled = false
         val enteredQuery = binding.edittextMainactivitySearchquery.text.toString()
         lifecycleScope.launch {
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         initializeSearchHistoryRecyclerView()
         initializeSearchResultRecyclerView()
         binding.imagebuttonMainactivitySearch.setOnClickListener {
-            performSearch()
+            onSearchPressed()
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
