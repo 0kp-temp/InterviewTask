@@ -2,14 +2,18 @@ package com.company.interviewtask
 
 import androidx.lifecycle.ViewModel
 import com.company.interviewtask.data.SearchEmployerRepository
+import com.company.interviewtask.database.AppDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val searchEmployerRepository: SearchEmployerRepository
+    private val searchEmployerRepository: SearchEmployerRepository,
+    private val database: AppDatabase
 ) : ViewModel() {
 
     sealed class AppError {
@@ -31,5 +35,11 @@ class MainActivityViewModel @Inject constructor(
         }
         emit(AppError.None)
     }
+
+    fun onClearSearchHistoryPressed() = flow {
+        database.clearAllTables()
+        selectedSearchQuery = ""
+        emit(Unit)
+    }.flowOn(Dispatchers.IO)
 
 }

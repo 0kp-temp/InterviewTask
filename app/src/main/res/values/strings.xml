@@ -6,4 +6,5 @@
     <string name="mainactivity_searchquery_contentdescription">Enter employer to search</string>
     <string name="mainactivity_toast_search_already_done">Search already done!</string>
     <string name="mainactivity_toast_network_error">Network error!</string>
+    <string name="mainactivity_clearsearchhistory_button_text">Clear search history</string>
 </resources>

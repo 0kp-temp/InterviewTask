@@ -142,6 +142,13 @@ class MainActivity : AppCompatActivity() {
                 refreshData()
             }
         }
+        binding.buttonMainactivityClearsearchhistory.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.onClearSearchHistoryPressed().collect {
+                    refreshData()
+                }
+            }
+        }
         setupEdgeToEdge()
     }
 }
