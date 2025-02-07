@@ -52,9 +52,12 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+    implementation(libs.coroutines.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.room.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
