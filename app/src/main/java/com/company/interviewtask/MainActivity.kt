@@ -12,14 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.company.interviewtask.database.DAO
+import com.company.interviewtask.database.SearchQueryResults
 import com.company.interviewtask.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val COLLECTOR_COUNT = 1
+private const val TAKE_FOR_HISTORY_BROWSING = 1
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -34,10 +34,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchResultAdapter: SearchResultAdapter
 
     private fun initializeSearchHistoryRecyclerView() {
-        searchQueryAdapter = SearchQueryAdapter() {
+        searchQueryAdapter = SearchQueryAdapter {
             viewModel.selectedSearchQuery = it.searchQuery
             binding.edittextMainactivitySearchquery.setText(it.searchQuery)
-            refreshData()
+            lifecycleScope.launch {
+                dao.getAllSearches().take(TAKE_FOR_HISTORY_BROWSING).collect { searches ->
+                    displaySearchResults(searches, it.searchQuery)
+                }
+            }
         }
         binding.recyclerviewMainactivitySearchhistory.apply {
             adapter = searchQueryAdapter
@@ -49,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeSearchResultRecyclerView() {
-        searchResultAdapter = SearchResultAdapter() {
+        searchResultAdapter = SearchResultAdapter {
             EmployerDetailsDialogFragment.newInstance(it.id)
                 .show(supportFragmentManager, EmployerDetailsDialogFragment.TAG)
         }
@@ -66,62 +70,55 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun refreshData() {
-        val currentSearchQuery = binding.edittextMainactivitySearchquery.text.toString()
-        binding.imagebuttonMainactivitySearch.isEnabled = true
-        lifecycleScope.launch {
-            dao.getAllSearches().take(COLLECTOR_COUNT).collect { searches ->
-                searches.map { it.searchQuery }.let { searchHistory ->
-                    searchQueryAdapter.submitList(searchHistory.map {
-                        SearchQueryViewHolder.SearchQueryUiData(
-                            it.searchId,
-                            it.searchQuery
-                        )
-                    })
-                }
-
-                searches.firstOrNull { it.searchQuery.searchQuery == currentSearchQuery }
-                    ?.let { searchQueryResults ->
-                        searchResultAdapter.submitList(searchQueryResults.results.map {
-                            SearchResultViewHolder.SearchResultUiData(
-                                it.id,
-                                it.name
-                            )
-                        })
-                    } ?: run { searchResultAdapter.submitList(emptyList()) }
-            }
+    private fun displaySearchQueries(searches: List<SearchQueryResults>) {
+        searches.map { it.searchQuery }.let { searchHistory ->
+            searchQueryAdapter.submitList(searchHistory.map {
+                SearchQueryViewHolder.SearchQueryUiData(
+                    it.searchId,
+                    it.searchQuery
+                )
+            })
         }
+    }
+
+    private fun displaySearchResults(searches: List<SearchQueryResults>, selectedQuery: String) {
+        searches.firstOrNull { it.searchQuery.searchQuery == selectedQuery }?.let {
+            searchResultAdapter.submitList(it.results.map { result ->
+                SearchResultViewHolder.SearchResultUiData(
+                    result.id,
+                    result.name
+                )
+            })
+        } ?: searchResultAdapter.submitList(emptyList())
     }
 
     private fun onSearchPressed() {
         binding.imagebuttonMainactivitySearch.isEnabled = false
         val enteredQuery = binding.edittextMainactivitySearchquery.text.toString()
         lifecycleScope.launch {
-            viewModel.searchEmployer(enteredQuery).take(COLLECTOR_COUNT).collect {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    when (it) {
-                        MainActivityViewModel.AppError.None -> {
-                            //no-op
-                        }
+            viewModel.searchEmployer(enteredQuery).collect {
+                when (it) {
+                    MainActivityViewModel.AppError.None -> {
+                        //no-op
+                    }
 
-                        MainActivityViewModel.AppError.SearchAlreadyDone -> {
-                            Toast.makeText(
-                                this@MainActivity,
-                                getString(R.string.mainactivity_toast_search_already_done),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    MainActivityViewModel.AppError.SearchAlreadyDone -> {
+                        Toast.makeText(
+                            this@MainActivity,
+                            getString(R.string.mainactivity_toast_search_already_done),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
 
-                        MainActivityViewModel.AppError.SearchNetworkError -> {
-                            Toast.makeText(
-                                this@MainActivity,
-                                getString(R.string.mainactivity_toast_network_error),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    MainActivityViewModel.AppError.SearchNetworkError -> {
+                        Toast.makeText(
+                            this@MainActivity,
+                            getString(R.string.mainactivity_toast_network_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                refreshData()
+                binding.imagebuttonMainactivitySearch.isEnabled = true
             }
         }
     }
@@ -136,16 +133,15 @@ class MainActivity : AppCompatActivity() {
         binding.imagebuttonMainactivitySearch.setOnClickListener {
             onSearchPressed()
         }
-        binding.edittextMainactivitySearchquery.setText(viewModel.selectedSearchQuery)
+        binding.buttonMainactivityClearsearchhistory.setOnClickListener {
+            viewModel.onClearSearchHistoryPressed()
+        }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                refreshData()
-            }
-        }
-        binding.buttonMainactivityClearsearchhistory.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.onClearSearchHistoryPressed().collect {
-                    refreshData()
+                dao.getAllSearches().collect { searches ->
+                    displaySearchQueries(searches)
+                    displaySearchResults(searches, viewModel.selectedSearchQuery)
+                    binding.imagebuttonMainactivitySearch.isEnabled = true
                 }
             }
         }

@@ -11,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 private const val DATABASE_NAME = "app-database"
 
@@ -19,15 +20,18 @@ private const val DATABASE_NAME = "app-database"
 object SingletonModule {
 
     @Provides
+    @Singleton
     fun provideDatabase(@ApplicationContext applicationContext: Context): AppDatabase =
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration().build()
 
     @Provides
+    @Singleton
     fun provideEmployersService(): EmployersService =
         EndpointServiceCreator.createEmployersService()
 
     @Provides
+    @Singleton
     fun provideDAO(applicationDatabase: AppDatabase): DAO = applicationDatabase.DAO()
 
 }
