@@ -12,7 +12,7 @@ class EndpointServiceTest {
 
     @Test
     fun testSearchEmployers() = runTest {
-        val service = EndpointServiceCreator.createService()
+        val service = EndpointServiceCreator.createEmployersService()
         val result = service.searchEmployers("Achmea")
         assertTrue(result.isSuccessful)
     }

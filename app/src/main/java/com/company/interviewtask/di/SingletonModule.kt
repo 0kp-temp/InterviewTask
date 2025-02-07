@@ -3,6 +3,8 @@ package com.company.interviewtask.di
 import android.content.Context
 import androidx.room.Room
 import com.company.interviewtask.database.AppDatabase
+import com.company.interviewtask.network.EmployersService
+import com.company.interviewtask.network.EndpointServiceCreator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,5 +21,8 @@ object SingletonModule {
     fun provideDatabase(@ApplicationContext applicationContext: Context): AppDatabase =
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration().build()
+
+    @Provides
+    fun provideEmployersService(): EmployersService = EndpointServiceCreator.createEmployersService()
 
 }

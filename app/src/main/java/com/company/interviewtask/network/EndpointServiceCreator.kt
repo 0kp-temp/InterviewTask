@@ -11,7 +11,7 @@ class EndpointServiceCreator {
 
     companion object {
 
-        fun createService(): EmployersService {
+        fun createEmployersService(): EmployersService {
             val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
             return Retrofit
                 .Builder()
