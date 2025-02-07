@@ -15,6 +15,9 @@ interface DAO {
     @Query("SELECT EXISTS (SELECT * FROM SearchQuery WHERE searchQuery = :query)")
     suspend fun isSearchPresent(query: String): Boolean
 
+    @Query("SELECT * FROM SearchResult WHERE id = :searchId")
+    suspend fun getSearch(searchId: Long): SearchResult
+
     @Insert
     suspend fun insert(query: SearchQuery): Long
 

@@ -45,7 +45,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeSearchResultRecyclerView() {
-        searchResultAdapter = SearchResultAdapter()
+        searchResultAdapter = SearchResultAdapter() {
+            EmployerDetailsDialogFragment.newInstance(it.id)
+                .show(supportFragmentManager, EmployerDetailsDialogFragment.TAG)
+        }
         binding.recyclerviewMainactivitySearchresults.apply {
             adapter = searchResultAdapter
         }

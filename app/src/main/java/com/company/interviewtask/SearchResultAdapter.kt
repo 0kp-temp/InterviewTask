@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.company.interviewtask.databinding.ItemSearchResultBinding
 
-class SearchResultAdapter :
+class SearchResultAdapter(private val onClick: (SearchQueryViewHolder.SearchResultUiData) -> Unit) :
     ListAdapter<SearchQueryViewHolder.SearchResultUiData, SearchResultViewHolder>(
         object : DiffUtil.ItemCallback<SearchQueryViewHolder.SearchResultUiData>() {
             override fun areItemsTheSame(
@@ -30,8 +30,11 @@ class SearchResultAdapter :
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        getItem(position)?.let {
-            holder.binding.buttonSearchresultViewholderResult.text = it.name
+        getItem(position)?.let { data ->
+            holder.binding.buttonSearchresultViewholderResult.text = data.name
+            holder.binding.buttonSearchresultViewholderResult.setOnClickListener {
+                onClick(data)
+            }
         }
     }
 }
