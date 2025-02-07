@@ -1,14 +1,11 @@
 package com.company.interviewtask
 
-import android.net.http.NetworkException
 import com.company.interviewtask.data.SearchEmployerRepository
 import com.company.interviewtask.database.DAO
 import com.company.interviewtask.network.EmployersService
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
 import org.junit.Before
