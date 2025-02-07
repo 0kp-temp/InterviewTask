@@ -15,6 +15,7 @@ import com.company.interviewtask.database.DAO
 import com.company.interviewtask.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeSearchHistoryRecyclerView() {
         searchQueryAdapter = SearchQueryAdapter() {
+            viewModel.selectedSearchQuery = it.searchQuery
             binding.edittextMainactivitySearchquery.setText(it.searchQuery)
             refreshData()
         }
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     private fun refreshData() {
         val currentSearchQuery = binding.edittextMainactivitySearchquery.text.toString()
         lifecycleScope.launch {
-            dao.getAllSearches().collect { searches ->
+            dao.getAllSearches().take(1).collect { searches ->
                 searches.map { it.searchQuery }.let { searchHistory ->
                     searchQueryAdapter.submitList(null)
                     searchQueryAdapter.submitList(searchHistory)
@@ -88,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         binding.imagebuttonMainactivitySearch.isEnabled = false
         val enteredQuery = binding.edittextMainactivitySearchquery.text.toString()
         lifecycleScope.launch {
-            viewModel.searchEmployer(enteredQuery).collect {
+            viewModel.searchEmployer(enteredQuery).take(1).collect {
                 lifecycleScope.launch(Dispatchers.Main) {
                     when (it) {
                         MainActivityViewModel.AppError.None -> {
@@ -128,6 +130,7 @@ class MainActivity : AppCompatActivity() {
         binding.imagebuttonMainactivitySearch.setOnClickListener {
             onSearchPressed()
         }
+        binding.edittextMainactivitySearchquery.setText(viewModel.selectedSearchQuery)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 refreshData()

@@ -2,7 +2,6 @@ package com.company.interviewtask
 
 import androidx.lifecycle.ViewModel
 import com.company.interviewtask.data.SearchEmployerRepository
-import com.company.interviewtask.database.DAO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,7 +18,10 @@ class MainActivityViewModel @Inject constructor(
         object SearchNetworkError : AppError()
     }
 
+    var selectedSearchQuery: String = ""
+
     fun searchEmployer(query: String): Flow<AppError> = flow {
+        selectedSearchQuery = query
         try {
             searchEmployerRepository.searchEmployer(query)
         } catch (e: SearchEmployerRepository.SearchAlreadyDoneException) {
