@@ -25,6 +25,12 @@ class MainActivityViewModel @Inject constructor(
     var selectedSearchQuery: String = ""
 
     fun searchEmployer(query: String): Flow<AppError> = flow {
+        if (query.trim()
+                .isEmpty()
+        ) { //Ignore empty search queries, no handling for this in repository
+            emit(AppError.None)
+            return@flow
+        }
         selectedSearchQuery = query
         try {
             searchEmployerRepository.searchEmployer(query)
