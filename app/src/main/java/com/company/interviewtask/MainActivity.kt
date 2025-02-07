@@ -71,8 +71,12 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             dao.getAllSearches().take(COLLECTOR_COUNT).collect { searches ->
                 searches.map { it.searchQuery }.let { searchHistory ->
-                    searchQueryAdapter.submitList(null)
-                    searchQueryAdapter.submitList(searchHistory)
+                    searchQueryAdapter.submitList(searchHistory.map {
+                        SearchQueryViewHolder.SearchQueryUiData(
+                            it.searchId,
+                            it.searchQuery
+                        )
+                    })
                 }
 
                 searches.firstOrNull { it.searchQuery.searchQuery == currentSearchQuery }
