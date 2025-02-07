@@ -25,3 +25,7 @@ Triggering endpoint and save result to database, allows to open previous search 
 - about 2h - ui implementation
 - about 2h - testing and bug-fixing
 - about 1h - admin stuff (readme, repo creating because not able to send zip)
+
+## Dev tools & test device
+
+Project was done using Android Studio Ladybug | 2024.2.1 Patch 2, testing was done only on debug build on Android 15 device (due to time constraints).
