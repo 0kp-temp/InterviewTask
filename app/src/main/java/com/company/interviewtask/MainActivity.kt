@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val COLLECTOR_COUNT = 1
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     private fun refreshData() {
         val currentSearchQuery = binding.edittextMainactivitySearchquery.text.toString()
         lifecycleScope.launch {
-            dao.getAllSearches().take(1).collect { searches ->
+            dao.getAllSearches().take(COLLECTOR_COUNT).collect { searches ->
                 searches.map { it.searchQuery }.let { searchHistory ->
                     searchQueryAdapter.submitList(null)
                     searchQueryAdapter.submitList(searchHistory)
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         binding.imagebuttonMainactivitySearch.isEnabled = false
         val enteredQuery = binding.edittextMainactivitySearchquery.text.toString()
         lifecycleScope.launch {
-            viewModel.searchEmployer(enteredQuery).take(1).collect {
+            viewModel.searchEmployer(enteredQuery).take(COLLECTOR_COUNT).collect {
                 lifecycleScope.launch(Dispatchers.Main) {
                     when (it) {
                         MainActivityViewModel.AppError.None -> {
